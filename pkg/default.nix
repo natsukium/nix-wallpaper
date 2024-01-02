@@ -9,6 +9,9 @@
 
 , backgroundColor ? null
 , logoColors ? { }
+, logoRotate ? "-0"
+, logoGravity ? "center"
+, logoOffset ? "+0+0"
 
   # secret option for source-code readers
 , widdershins ? false
@@ -45,7 +48,7 @@ let
 in
 runCommandLocal "nix-wallpaper"
 rec {
-  inherit width height;
+  inherit width height logoGravity logoOffset logoRotate;
   inherit (colorscheme) color0 color1 color2 color3 color4 color5 backgroundColor;
   buildInputs = [ imagemagick ];
   density = 1200;
@@ -60,8 +63,9 @@ rec {
     -resize ''${scale}% \
     -density $density \
     -background $backgroundColor \
-    -gravity center \
-    -extent ''${width}x''${height} \
+    -rotate ''${logoRotate} \
+    -gravity ''${logoGravity} \
+    -extent ''${width}x''${height}''${logoOffset} \
     $flop \
     wallpaper.svg $out/share/wallpapers/nixos-wallpaper.png
 ''
